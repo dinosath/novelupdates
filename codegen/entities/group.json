@@ -1,0 +1,57 @@
+{
+  "type": "object",
+  "title": "Group",
+  "description": "Publishing or scanlation group providing sources",
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "Group name"
+    },
+    "website": {
+      "type": "string",
+      "description": "Official group website or page"
+    },
+    "language": {
+      "type": "string",
+      "description": "Primary language the group works in"
+    },
+    "description": {
+      "type": "text",
+      "description": "Information about the group"
+    },
+    "logo-url": {
+      "type": "string",
+      "description": "URL to group's logo or avatar"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": ["active", "inactive", "disbanded"],
+      "default": "active",
+      "description": "Current status of the group"
+    },
+    "founded-date": {
+      "type": "date",
+      "description": "When the group was founded"
+    },
+    "discord-url": {
+      "type": "string",
+      "description": "Discord server invite link"
+    },
+    "patreon-url": {
+      "type": "string",
+      "description": "Patreon page for support"
+    },
+    "member-count": {
+      "type": "integer",
+      "description": "Number of members in the group"
+    },
+    "sources": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "Source",
+      "mappedBy": "Group",
+      "description": "Sources provided by this group"
+    }
+  }
+}

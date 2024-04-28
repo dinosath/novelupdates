@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "title": "Publisher",
+  "description": "Publishing company or organization",
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "Publisher name"
+    },
+    "country": {
+      "type": "string",
+      "description": "Country where publisher is based"
+    },
+    "website": {
+      "type": "string",
+      "description": "Publisher's official website"
+    },
+    "description": {
+      "type": "text",
+      "description": "Information about the publisher"
+    },
+    "novels": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "Novel",
+      "mappedBy": "Publisher",
+      "description": "Novels published by this publisher"
+    }
+  }
+}
+

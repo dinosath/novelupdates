@@ -1,0 +1,700 @@
+{
+  "project_name": "novelupdates",
+  "project_author": "Konstantinos Athanasiou",
+  "project_version": "0.1.0",
+  "frontend_framework": "shadcn-admin-kit",
+  "database": "postgres",
+  "protocol": "rest",
+  "authentication": "none",
+  "serve_static_content": true,
+  "static_includes": [
+    {
+      "route": "/admin",
+      "assets_dir": "admin/dist"
+    }
+  ],
+  "features": [
+    "open-telemetry"
+  ],
+  "entities": {
+    "artist": {
+      "type": "object",
+      "title": "Artist",
+      "description": "Illustrator or artist for novel covers and illustrations",
+      "attributes": {
+        "name": {
+          "type": "string",
+          "required": true,
+          "description": "Artist's name"
+        },
+        "native-name": {
+          "type": "string",
+          "description": "Artist's name in native language/script"
+        },
+        "bio": {
+          "type": "text",
+          "description": "Biography or description of the artist"
+        },
+        "website": {
+          "type": "string",
+          "description": "Artist's official website or portfolio"
+        },
+        "novels": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "Novel",
+          "mappedBy": "Artist",
+          "description": "Novels illustrated by this artist"
+        }
+      }
+    },
+    "author": {
+      "type": "object",
+      "title": "Author",
+      "description": "Author or writer of novels",
+      "attributes": {
+        "name": {
+          "type": "string",
+          "required": true,
+          "description": "Author's name"
+        },
+        "native-name": {
+          "type": "string",
+          "description": "Author's name in native language/script"
+        },
+        "bio": {
+          "type": "text",
+          "description": "Biography or description of the author"
+        },
+        "website": {
+          "type": "string",
+          "description": "Author's official website or social media"
+        },
+        "country": {
+          "type": "string",
+          "description": "Author's country of origin"
+        },
+        "novels": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "Novel",
+          "mappedBy": "Author",
+          "description": "Novels written by this author"
+        }
+      }
+    },
+    "chapter": {
+      "type": "object",
+      "title": "Chapter",
+      "description": "Individual chapter belonging to a source",
+      "attributes": {
+        "title": {
+          "type": "string",
+          "required": true,
+          "description": "Chapter title"
+        },
+        "number": {
+          "type": "decimal",
+          "required": true,
+          "description": "Chapter number (supports decimals for extras like 5.5)"
+        },
+        "part": {
+          "type": "integer",
+          "description": "Part number within a chapter (for split chapters)"
+        },
+        "volume": {
+          "type": "integer",
+          "description": "Volume number this chapter belongs to"
+        },
+        "language": {
+          "type": "string",
+          "required": true,
+          "description": "Language of this chapter"
+        },
+        "content-url": {
+          "type": "string",
+          "description": "URL to the chapter content"
+        },
+        "release-date": {
+          "type": "datetime",
+          "description": "Release date/time of the chapter"
+        },
+        "views": {
+          "type": "integer",
+          "default": 0,
+          "description": "View count for this chapter"
+        },
+        "is-locked": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether chapter is premium/locked content"
+        },
+        "source": {
+          "type": "relation",
+          "relation": "manyToOne",
+          "target": "Source",
+          "mappedBy": "Chapter",
+          "description": "Source this chapter belongs to",
+          "required": true
+        },
+        "novels": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "Novel",
+          "mappedBy": "Chapter",
+          "description": "Novels this chapter belongs to (derived from source)"
+        }
+      }
+    },
+    "group": {
+      "type": "object",
+      "title": "Group",
+      "description": "Publishing or scanlation group providing sources",
+      "attributes": {
+        "name": {
+          "type": "string",
+          "required": true,
+          "description": "Group name"
+        },
+        "website": {
+          "type": "string",
+          "description": "Official group website or page"
+        },
+        "language": {
+          "type": "string",
+          "description": "Primary language the group works in"
+        },
+        "description": {
+          "type": "text",
+          "description": "Information about the group"
+        },
+        "logo-url": {
+          "type": "string",
+          "description": "URL to group's logo or avatar"
+        },
+        "status": {
+          "type": "enumeration",
+          "enum": [
+            "active",
+            "inactive",
+            "disbanded"
+          ],
+          "default": "active",
+          "description": "Current status of the group"
+        },
+        "founded-date": {
+          "type": "date",
+          "description": "When the group was founded"
+        },
+        "discord-url": {
+          "type": "string",
+          "description": "Discord server invite link"
+        },
+        "patreon-url": {
+          "type": "string",
+          "description": "Patreon page for support"
+        },
+        "member-count": {
+          "type": "integer",
+          "description": "Number of members in the group"
+        },
+        "sources": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "Source",
+          "mappedBy": "Group",
+          "description": "Sources provided by this group"
+        }
+      }
+    },
+    "novel": {
+      "type": "object",
+      "title": "Novel",
+      "description": "Primary novel entity holding core metadata",
+      "attributes": {
+        "default-name": {
+          "type": "string",
+          "required": true,
+          "description": "Default/original title of the novel"
+        },
+        "native-name": {
+          "type": "string",
+          "description": "Original title in native language/script"
+        },
+        "alternative-names": {
+          "type": "json",
+          "description": "List of alternative titles, romanizations, and translations"
+        },
+        "description": {
+          "type": "text",
+          "description": "Synopsis or overview of the novel"
+        },
+        "cover-image-url": {
+          "type": "string",
+          "description": "URL to the novel's cover image"
+        },
+        "original-language": {
+          "type": "string",
+          "required": true,
+          "description": "Language the novel was originally written in"
+        },
+        "country-of-origin": {
+          "type": "string",
+          "description": "Country where the novel originated"
+        },
+        "year": {
+          "type": "integer",
+          "description": "Year of original publication"
+        },
+        "status-origin": {
+          "type": "enumeration",
+          "enum": [
+            "ongoing",
+            "completed",
+            "hiatus",
+            "cancelled"
+          ],
+          "description": "Status in country of origin"
+        },
+        "licensed": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether officially licensed in English"
+        },
+        "english-publisher": {
+          "type": "string",
+          "description": "Name of English publisher if licensed"
+        },
+        "completely-translated": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether fully translated to English"
+        },
+        "release-frequency": {
+          "type": "string",
+          "description": "Chapter release frequency (e.g., daily, weekly)"
+        },
+        "average-rating": {
+          "type": "decimal",
+          "description": "Average user rating"
+        },
+        "rating-count": {
+          "type": "integer",
+          "default": 0,
+          "description": "Number of ratings"
+        },
+        "total-chapters": {
+          "type": "integer",
+          "description": "Total number of chapters"
+        },
+        "views": {
+          "type": "integer",
+          "default": 0,
+          "description": "Total view count"
+        },
+        "genres": {
+          "type": "json",
+          "description": "List of genre strings (e.g., Action, Adventure)"
+        },
+        "type": {
+          "type": "relation",
+          "relation": "manyToOne",
+          "target": "Type",
+          "mappedBy": "Novel",
+          "description": "Type of the novel (Web Novel, Light Novel, etc.)",
+          "required": true
+        },
+        "tags": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "Tag",
+          "mappedBy": "Novel",
+          "description": "Tags describing the novel (e.g., fantasy, romance)"
+        },
+        "authors": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "Author",
+          "mappedBy": "Novel",
+          "description": "Authors who wrote this novel"
+        },
+        "artists": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "Artist",
+          "mappedBy": "Novel",
+          "description": "Artists who illustrated this novel"
+        },
+        "publishers": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "Publisher",
+          "mappedBy": "Novel",
+          "description": "Publishers of this novel"
+        },
+        "sources": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "Source",
+          "mappedBy": "Novel",
+          "description": "Publication or scanlation sources of this novel"
+        },
+        "chapters": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "Chapter",
+          "mappedBy": "Novel",
+          "description": "All chapters across all sources (for easy querying)"
+        },
+        "reviews": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "Review",
+          "mappedBy": "Novel",
+          "description": "User reviews for this novel"
+        },
+        "reading-lists": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "ReadingList",
+          "mappedBy": "Novel",
+          "description": "Users' reading list entries for this novel"
+        }
+      }
+    },
+    "publisher": {
+      "type": "object",
+      "title": "Publisher",
+      "description": "Publishing company or organization",
+      "attributes": {
+        "name": {
+          "type": "string",
+          "required": true,
+          "description": "Publisher name"
+        },
+        "country": {
+          "type": "string",
+          "description": "Country where publisher is based"
+        },
+        "website": {
+          "type": "string",
+          "description": "Publisher's official website"
+        },
+        "description": {
+          "type": "text",
+          "description": "Information about the publisher"
+        },
+        "novels": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "Novel",
+          "mappedBy": "Publisher",
+          "description": "Novels published by this publisher"
+        }
+      }
+    },
+    "reading-list": {
+      "type": "object",
+      "title": "ReadingList",
+      "description": "User's reading list for tracking novels (reading, completed, plan to read, etc.)",
+      "attributes": {
+        "status": {
+          "type": "enumeration",
+          "enum": [
+            "reading",
+            "completed",
+            "plan-to-read",
+            "on-hold",
+            "dropped"
+          ],
+          "required": true,
+          "description": "Reading status for this novel"
+        },
+        "current-chapter": {
+          "type": "integer",
+          "description": "Last chapter read"
+        },
+        "personal-rating": {
+          "type": "decimal",
+          "description": "User's personal rating (separate from public review)"
+        },
+        "notes": {
+          "type": "text",
+          "description": "Personal notes about this novel"
+        },
+        "started-date": {
+          "type": "date",
+          "description": "Date when user started reading"
+        },
+        "completed-date": {
+          "type": "date",
+          "description": "Date when user completed reading"
+        },
+        "last-read": {
+          "type": "datetime",
+          "description": "Last time user read this novel"
+        },
+        "user": {
+          "type": "relation",
+          "relation": "manyToOne",
+          "target": "User",
+          "mappedBy": "ReadingList",
+          "required": true,
+          "description": "User who owns this reading list entry"
+        },
+        "novel": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "Novel",
+          "mappedBy": "ReadingList",
+          "required": true,
+          "description": "Novel in this reading list"
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "title": "Review",
+      "description": "User review and rating for a novel",
+      "attributes": {
+        "rating": {
+          "type": "decimal",
+          "required": true,
+          "description": "Rating score (e.g., 1-5 stars)"
+        },
+        "title": {
+          "type": "string",
+          "description": "Review title or headline"
+        },
+        "content": {
+          "type": "text",
+          "required": true,
+          "description": "Review text content"
+        },
+        "spoiler": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether review contains spoilers"
+        },
+        "helpful-count": {
+          "type": "integer",
+          "default": 0,
+          "description": "Number of users who found this review helpful"
+        },
+        "user": {
+          "type": "relation",
+          "relation": "manyToOne",
+          "target": "User",
+          "mappedBy": "Review",
+          "required": true,
+          "description": "User who wrote this review"
+        },
+        "novel": {
+          "type": "relation",
+          "relation": "manyToOne",
+          "target": "Novel",
+          "mappedBy": "Review",
+          "required": true,
+          "description": "Novel being reviewed"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "title": "Source",
+      "description": "A source representing a publication or scanlation for a novel",
+      "attributes": {
+        "name": {
+          "type": "string",
+          "required": true,
+          "description": "Name or label identifying the source"
+        },
+        "language": {
+          "type": "string",
+          "required": true,
+          "description": "Language for this source"
+        },
+        "url": {
+          "type": "string",
+          "description": "Official link to the source"
+        },
+        "status": {
+          "type": "enumeration",
+          "enum": [
+            "active",
+            "inactive",
+            "completed",
+            "dropped"
+          ],
+          "default": "active",
+          "description": "Status of this source/translation"
+        },
+        "completely-translated": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this source has all chapters translated"
+        },
+        "chapter-count": {
+          "type": "integer",
+          "default": 0,
+          "description": "Number of chapters available from this source"
+        },
+        "is-official": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this is an official translation/publication"
+        },
+        "group": {
+          "type": "relation",
+          "relation": "manyToOne",
+          "target": "Group",
+          "mappedBy": "Source",
+          "description": "Group providing this source"
+        },
+        "novel": {
+          "type": "relation",
+          "relation": "manyToOne",
+          "target": "Novel",
+          "mappedBy": "Source",
+          "required": true,
+          "description": "Novel this source belongs to"
+        },
+        "chapters": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "Chapter",
+          "mappedBy": "source",
+          "description": "Chapters under this source"
+        }
+      }
+    },
+    "tag": {
+      "type": "object",
+      "title": "Tag",
+      "description": "Categorization tag for novels",
+      "attributes": {
+        "name": {
+          "type": "string",
+          "required": true,
+          "description": "Tag name"
+        },
+        "slug": {
+          "type": "uid",
+          "required": true,
+          "unique": true,
+          "description": "URL-friendly unique identifier"
+        },
+        "description": {
+          "type": "text",
+          "description": "Description of what this tag represents"
+        },
+        "category": {
+          "type": "enumeration",
+          "enum": [
+            "genre",
+            "theme",
+            "plot",
+            "character",
+            "setting",
+            "other"
+          ],
+          "description": "Category this tag belongs to"
+        },
+        "usage-count": {
+          "type": "integer",
+          "default": 0,
+          "description": "Number of novels with this tag"
+        },
+        "novels": {
+          "type": "relation",
+          "relation": "manyToMany",
+          "target": "Novel",
+          "mappedBy": "Tag",
+          "description": "Novels associated with this tag"
+        }
+      }
+    },
+    "type": {
+      "type": "object",
+      "title": "Type",
+      "description": "Classification type of a novel (e.g., Web Novel, Light Novel)",
+      "attributes": {
+        "name": {
+          "type": "string",
+          "required": true,
+          "unique": true,
+          "description": "Type name"
+        },
+        "description": {
+          "type": "text",
+          "description": "Description or notes about this type"
+        },
+        "novels": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "Novel",
+          "mappedBy": "Type",
+          "description": "Novels using this type"
+        }
+      }
+    },
+    "user": {
+      "type": "object",
+      "title": "User",
+      "description": "User account for reviews, ratings, and reading lists",
+      "attributes": {
+        "username": {
+          "type": "string",
+          "required": true,
+          "unique": true,
+          "description": "Unique username"
+        },
+        "email": {
+          "type": "email",
+          "required": true,
+          "unique": true,
+          "description": "User email address"
+        },
+        "password-hash": {
+          "type": "string",
+          "required": true,
+          "description": "Hashed password"
+        },
+        "display-name": {
+          "type": "string",
+          "description": "Display name for the user"
+        },
+        "avatar-url": {
+          "type": "string",
+          "description": "URL to user's avatar image"
+        },
+        "bio": {
+          "type": "text",
+          "description": "User biography or profile description"
+        },
+        "joined-date": {
+          "type": "datetime",
+          "description": "Date when user joined"
+        },
+        "last-active": {
+          "type": "datetime",
+          "description": "Last activity timestamp"
+        },
+        "reviews": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "Review",
+          "mappedBy": "User",
+          "description": "Reviews written by this user"
+        },
+        "reading-lists": {
+          "type": "relation",
+          "relation": "oneToMany",
+          "target": "ReadingList",
+          "mappedBy": "User",
+          "description": "Reading lists created by this user"
+        }
+      }
+    }
+  }
+}

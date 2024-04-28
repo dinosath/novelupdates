@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "title": "Artist",
+  "description": "Illustrator or artist for novel covers and illustrations",
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "Artist's name"
+    },
+    "native-name": {
+      "type": "string",
+      "description": "Artist's name in native language/script"
+    },
+    "bio": {
+      "type": "text",
+      "description": "Biography or description of the artist"
+    },
+    "website": {
+      "type": "string",
+      "description": "Artist's official website or portfolio"
+    },
+    "novels": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "Novel",
+      "mappedBy": "Artist",
+      "description": "Novels illustrated by this artist"
+    }
+  }
+}
+

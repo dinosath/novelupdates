@@ -1,0 +1,36 @@
+[package]
+name = "novelupdates"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[profile.release]
+codegen-units = 1
+lto = true
+strip = true
+debug = false
+panic = "abort"
+
+[dependencies]
+dotenvy = "0.15"
+axum = { version = "0.8", default-features = false, features = ["http1", "tokio", "json"] }
+anyhow = "1.0"
+env_logger = { version = "0.11", default-features = false, features = ["auto-color", "humantime"] }
+log = { version = "0.4", default-features = false }
+serde = { version = "1.0", default-features = false, features = ["derive"] }
+serde_json = { version = "1.0", default-features = false, features = ["std"] }
+static-serve = "0.4"
+sea-orm = { version = "2.0.0-rc.17", features = ["sqlx-postgres","runtime-tokio-rustls","macros","with-chrono","with-json","with-uuid"] }
+sqlx = { version = "0.8.6", features = ["runtime-tokio-rustls", "postgres", "migrate", ] }
+utoipa = { version = "5.4", features = ["axum_extras", "uuid", "chrono"] }
+utoipa-axum = "0.2"
+utoipa-scalar = { version = "0.3", features = ["axum"] }
+tokio = { version = "1.47", default-features = false, features = ["rt-multi-thread", "macros", "net", "signal"] }
+
+
+[dev-dependencies]
+testcontainers = "0.25"
+testcontainers-modules = { version = "0.13", features = ["postgres"] }
+reqwest = { version = "0.12", features = ["json", "cookies"] }
+tokio-test = "0.4"
+serial_test = "3.2"

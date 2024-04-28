@@ -1,0 +1,155 @@
+{
+  "type": "object",
+  "title": "Novel",
+  "description": "Primary novel entity holding core metadata",
+  "attributes": {
+    "default-name": {
+      "type": "string",
+      "required": true,
+      "description": "Default/original title of the novel"
+    },
+    "native-name": {
+      "type": "string",
+      "description": "Original title in native language/script"
+    },
+    "alternative-names": {
+      "type": "json",
+      "description": "List of alternative titles, romanizations, and translations"
+    },
+    "description": {
+      "type": "text",
+      "description": "Synopsis or overview of the novel"
+    },
+    "cover-image-url": {
+      "type": "string",
+      "description": "URL to the novel's cover image"
+    },
+    "original-language": {
+      "type": "string",
+      "required": true,
+      "description": "Language the novel was originally written in"
+    },
+    "country-of-origin": {
+      "type": "string",
+      "description": "Country where the novel originated"
+    },
+    "year": {
+      "type": "integer",
+      "description": "Year of original publication"
+    },
+    "status-origin": {
+      "type": "enumeration",
+      "enum": [
+        "ongoing",
+        "completed",
+        "hiatus",
+        "cancelled"
+      ],
+      "description": "Status in country of origin"
+    },
+    "licensed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether officially licensed in English"
+    },
+    "english-publisher": {
+      "type": "string",
+      "description": "Name of English publisher if licensed"
+    },
+    "completely-translated": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether fully translated to English"
+    },
+    "release-frequency": {
+      "type": "string",
+      "description": "Chapter release frequency (e.g., daily, weekly)"
+    },
+    "average-rating": {
+      "type": "decimal",
+      "description": "Average user rating"
+    },
+    "rating-count": {
+      "type": "integer",
+      "default": 0,
+      "description": "Number of ratings"
+    },
+    "total-chapters": {
+      "type": "integer",
+      "description": "Total number of chapters"
+    },
+    "views": {
+      "type": "integer",
+      "default": 0,
+      "description": "Total view count"
+    },
+    "genres": {
+      "type": "json",
+      "description": "List of genre strings (e.g., Action, Adventure)"
+    },
+    "type": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "Type",
+      "mappedBy": "Novel",
+      "description": "Type of the novel (Web Novel, Light Novel, etc.)",
+      "required": true
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "Tag",
+      "mappedBy": "Novel",
+      "description": "Tags describing the novel (e.g., fantasy, romance)"
+    },
+    "authors": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "Author",
+      "mappedBy": "Novel",
+      "description": "Authors who wrote this novel"
+    },
+    "artists": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "Artist",
+      "mappedBy": "Novel",
+      "description": "Artists who illustrated this novel"
+    },
+    "publishers": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "Publisher",
+      "mappedBy": "Novel",
+      "description": "Publishers of this novel"
+    },
+    "sources": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "Source",
+      "mappedBy": "Novel",
+      "description": "Publication or scanlation sources of this novel"
+    },
+    "chapters": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "Chapter",
+      "mappedBy": "Novel",
+      "description": "All chapters across all sources (for easy querying)"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "Review",
+      "mappedBy": "Novel",
+      "description": "User reviews for this novel"
+    },
+    "reading-lists": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "ReadingList",
+      "mappedBy": "Novel",
+      "description": "Users' reading list entries for this novel"
+    }
+  }
+}

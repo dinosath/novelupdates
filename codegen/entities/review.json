@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "title": "Review",
+  "description": "User review and rating for a novel",
+  "attributes": {
+    "rating": {
+      "type": "decimal",
+      "required": true,
+      "description": "Rating score (e.g., 1-5 stars)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Review title or headline"
+    },
+    "content": {
+      "type": "text",
+      "required": true,
+      "description": "Review text content"
+    },
+    "spoiler": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether review contains spoilers"
+    },
+    "helpful-count": {
+      "type": "integer",
+      "default": 0,
+      "description": "Number of users who found this review helpful"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "User",
+      "mappedBy": "Review",
+      "required": true,
+      "description": "User who wrote this review"
+    },
+    "novel": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "Novel",
+      "mappedBy": "Review",
+      "required": true,
+      "description": "Novel being reviewed"
+    }
+  }
+}
+

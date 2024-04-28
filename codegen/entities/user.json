@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "title": "User",
+  "description": "User account for reviews, ratings, and reading lists",
+  "attributes": {
+    "username": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "description": "Unique username"
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true,
+      "description": "User email address"
+    },
+    "password-hash": {
+      "type": "string",
+      "required": true,
+      "description": "Hashed password"
+    },
+    "display-name": {
+      "type": "string",
+      "description": "Display name for the user"
+    },
+    "avatar-url": {
+      "type": "string",
+      "description": "URL to user's avatar image"
+    },
+    "bio": {
+      "type": "text",
+      "description": "User biography or profile description"
+    },
+    "joined-date": {
+      "type": "datetime",
+      "description": "Date when user joined"
+    },
+    "last-active": {
+      "type": "datetime",
+      "description": "Last activity timestamp"
+    },
+    "reviews": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "Review",
+      "mappedBy": "User",
+      "description": "Reviews written by this user"
+    },
+    "reading-lists": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "ReadingList",
+      "mappedBy": "User",
+      "description": "Reading lists created by this user"
+    }
+  }
+}
+

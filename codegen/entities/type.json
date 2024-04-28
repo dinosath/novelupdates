@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "title": "Type",
+  "description": "Classification type of a novel (e.g., Web Novel, Light Novel)",
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "description": "Type name"
+    },
+    "description": {
+      "type": "text",
+      "description": "Description or notes about this type"
+    },
+    "novels": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "Novel",
+      "mappedBy": "Type",
+      "description": "Novels using this type"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "type": "object",
+  "title": "Chapter",
+  "description": "Individual chapter belonging to a source",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Chapter title"
+    },
+    "number": {
+      "type": "decimal",
+      "required": true,
+      "description": "Chapter number (supports decimals for extras like 5.5)"
+    },
+    "part": {
+      "type": "integer",
+      "description": "Part number within a chapter (for split chapters)"
+    },
+    "volume": {
+      "type": "integer",
+      "description": "Volume number this chapter belongs to"
+    },
+    "language": {
+      "type": "string",
+      "required": true,
+      "description": "Language of this chapter"
+    },
+    "content-url": {
+      "type": "string",
+      "description": "URL to the chapter content"
+    },
+    "release-date": {
+      "type": "datetime",
+      "description": "Release date/time of the chapter"
+    },
+    "views": {
+      "type": "integer",
+      "default": 0,
+      "description": "View count for this chapter"
+    },
+    "is-locked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether chapter is premium/locked content"
+    },
+    "source": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "Source",
+      "mappedBy": "Chapter",
+      "description": "Source this chapter belongs to",
+      "required": true
+    },
+    "novels": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "Novel",
+      "mappedBy": "Chapter",
+      "description": "Novels this chapter belongs to (derived from source)"
+    }
+  }
+}

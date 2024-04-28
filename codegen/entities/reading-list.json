@@ -1,0 +1,53 @@
+{
+  "type": "object",
+  "title": "ReadingList",
+  "description": "User's reading list for tracking novels (reading, completed, plan to read, etc.)",
+  "attributes": {
+    "status": {
+      "type": "enumeration",
+      "enum": ["reading", "completed", "plan-to-read", "on-hold", "dropped"],
+      "required": true,
+      "description": "Reading status for this novel"
+    },
+    "current-chapter": {
+      "type": "integer",
+      "description": "Last chapter read"
+    },
+    "personal-rating": {
+      "type": "decimal",
+      "description": "User's personal rating (separate from public review)"
+    },
+    "notes": {
+      "type": "text",
+      "description": "Personal notes about this novel"
+    },
+    "started-date": {
+      "type": "date",
+      "description": "Date when user started reading"
+    },
+    "completed-date": {
+      "type": "date",
+      "description": "Date when user completed reading"
+    },
+    "last-read": {
+      "type": "datetime",
+      "description": "Last time user read this novel"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "User",
+      "mappedBy": "ReadingList",
+      "required": true,
+      "description": "User who owns this reading list entry"
+    },
+    "novel": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "Novel",
+      "mappedBy": "ReadingList",
+      "required": true,
+      "description": "Novel in this reading list"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "title": "Author",
+  "description": "Author or writer of novels",
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "Author's name"
+    },
+    "native-name": {
+      "type": "string",
+      "description": "Author's name in native language/script"
+    },
+    "bio": {
+      "type": "text",
+      "description": "Biography or description of the author"
+    },
+    "website": {
+      "type": "string",
+      "description": "Author's official website or social media"
+    },
+    "country": {
+      "type": "string",
+      "description": "Author's country of origin"
+    },
+    "novels": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "Novel",
+      "mappedBy": "Author",
+      "description": "Novels written by this author"
+    }
+  }
+}

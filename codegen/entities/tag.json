@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "title": "Tag",
+  "description": "Categorization tag for novels",
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "description": "Tag name"
+    },
+    "slug": {
+      "type": "uid",
+      "required": true,
+      "unique": true,
+      "description": "URL-friendly unique identifier"
+    },
+    "description": {
+      "type": "text",
+      "description": "Description of what this tag represents"
+    },
+    "category": {
+      "type": "enumeration",
+      "enum": ["genre", "theme", "plot", "character", "setting", "other"],
+      "description": "Category this tag belongs to"
+    },
+    "usage-count": {
+      "type": "integer",
+      "default": 0,
+      "description": "Number of novels with this tag"
+    },
+    "novels": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "Novel",
+      "mappedBy": "Tag",
+      "description": "Novels associated with this tag"
+    }
+  }
+}
